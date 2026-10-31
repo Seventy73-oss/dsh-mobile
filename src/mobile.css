@@ -1,0 +1,606 @@
+/* DSH Mobile: narrow-screen layout rules. */
+
+/* 注入控件默认关闭，只有窄屏且脚本检测到应用侧栏时才显示。 */
+#dsh-rail-toggle,
+#dsh-rail-backdrop,
+.dsh-set-back,
+.dsh-hs-close { display: none; }
+
+@media (max-width: 820px) {
+  html {
+    touch-action: manipulation;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  html,
+  body {
+    overflow-x: hidden !important;
+    overscroll-behavior-y: none;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  /* 主框架：对话列始终占满，侧栏和详情面板浮在上层。 */
+  #root [class*="_frame"] {
+    grid-template-columns: 0 minmax(0, 1fr) 0 !important;
+  }
+
+  /* 手机端改用 Bot 左栏作为抽屉；DSH 原生侧栏留空且会占满屏，直接隐藏。 */
+  #root [class*="sidebarCol"] { display: none !important; }
+
+  html.dsh-rail-mobile .bt-leftcol {
+    position: fixed !important;
+    left: 0 !important;
+    top: 0 !important;
+    bottom: 0 !important;
+    width: min(30vw, 260px) !important;
+    min-width: 100px !important;
+    max-width: 260px !important;
+    box-sizing: border-box !important;
+    padding: calc(52px + env(safe-area-inset-top, 0px)) 12px calc(12px + env(safe-area-inset-bottom, 0px)) !important;
+    overflow: hidden !important;
+    background: Canvas !important;
+    border: 0 !important;
+    border-right: 1px solid rgba(127, 127, 127, .22) !important;
+    border-radius: 0 18px 18px 0 !important;
+    box-shadow: 0 12px 36px rgba(0, 0, 0, .2) !important;
+    z-index: 70 !important;
+    transform: translateX(-105%);
+    transition: transform .22s cubic-bezier(.2, .75, .25, 1);
+  }
+
+  #root [class*="_centerCol"] {
+    grid-column: 2 !important;
+    margin-left: 0 !important;
+  }
+  #root [class*="rightbarCol"] {
+    grid-column: 3 !important;
+    overflow: hidden !important;
+  }
+
+  /* 仅调整主对话顶栏，避免影响设置页和 Harness 弹窗里的其他 header。 */
+  #root [class*="_centerCol"] [class*="_header"] {
+    min-height: 46px !important;
+    padding-top: calc(4px + env(safe-area-inset-top, 0px)) !important;
+    background: transparent !important;
+    border-bottom: 0 !important;
+    box-shadow: none !important;
+    -webkit-backdrop-filter: none !important;
+    backdrop-filter: none !important;
+  }
+
+  html.dsh-rail-mobile .bt-leftcol > .bt-side {
+    width: 100% !important;
+    min-width: 0 !important;
+    padding-right: 0 !important;
+  }
+
+  html.dsh-rail-mobile .bt-leftcol .bt-rail-top {
+    width: 100% !important;
+    align-self: stretch !important;
+    flex-direction: column !important;
+    align-items: stretch !important;
+    gap: 8px !important;
+    padding: 4px 0 8px !important;
+  }
+  html.dsh-rail-mobile .bt-leftcol .bt-rail-top::before {
+    content: "Bot 列表";
+    padding: 0 12px 4px;
+    color: color-mix(in srgb, CanvasText 58%, transparent);
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: .02em;
+  }
+  html.dsh-rail-mobile .bt-leftcol .bt-side-collapse { display: none !important; }
+
+  /* Bot 行：展开窄轨道中的图标项，显示 Bot 名称并保持足够触控面积。 */
+  html.dsh-rail-mobile .bt-leftcol .bt-row {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: center !important;
+    box-sizing: border-box !important;
+    width: 100% !important;
+    min-height: 72px !important;
+    height: auto !important;
+    padding: 8px 4px !important;
+    gap: 4px !important;
+    border-radius: 13px !important;
+    cursor: pointer;
+  }
+
+  html.dsh-rail-mobile .bt-leftcol .bt-row::after {
+    flex: 0 0 auto;
+    min-width: 0;
+    width: 100%;
+    margin-left: 0;
+    overflow: hidden;
+    color: CanvasText;
+    font: 14px/1.25 -apple-system, "Segoe UI", "Microsoft YaHei", system-ui, sans-serif;
+    text-align: center;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  html.dsh-rail-mobile .bt-leftcol .bt-row[title]::after { content: attr(title); }
+  html.dsh-rail-mobile .bt-leftcol .bt-row:not([title])::after { content: attr(aria-label); }
+
+  html.dsh-rail-mobile .bt-leftcol .bt-row .bt-mark,
+  html.dsh-rail-mobile .bt-leftcol .bt-row svg {
+    width: 32px !important;
+    height: 32px !important;
+  }
+
+  html.dsh-rail-mobile .bt-leftcol .bt-list {
+    align-items: stretch !important;
+    overflow-y: auto !important;
+  }
+  html.dsh-rail-mobile .bt-leftcol .bt-leftcol-foot-rail {
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: flex-end !important;
+    width: 100% !important;
+    gap: 8px !important;
+  }
+  html.dsh-rail-mobile .bt-leftcol .bt-leftcol-grip { display: none !important; }
+
+  #root [class*="footArea"] {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: flex-end !important;
+    gap: 8px !important;
+    width: 100% !important;
+    padding: 0 0 6px !important;
+  }
+
+  #root [class*="settingsArea"],
+  #root [class*="bt-account"],
+  #root [class*="triggerRow"] {
+    margin-right: auto !important;
+    margin-left: auto !important;
+  }
+
+  /* JS 增强态：抽屉默认收起，点击遮罩、选择 Bot 或按 Esc 关闭。 */
+  html.dsh-rail-mobile #dsh-rail-backdrop {
+    display: block;
+    position: fixed;
+    inset: 0;
+    z-index: 69;
+    background: rgba(15, 23, 42, .34);
+    -webkit-backdrop-filter: blur(2px);
+    backdrop-filter: blur(2px);
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transition: opacity .2s ease, visibility .2s ease;
+  }
+
+  html.dsh-rail-open #dsh-rail-backdrop {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+  }
+
+  html.dsh-rail-open .bt-leftcol { transform: translateX(0); }
+
+  html.dsh-rail-mobile #dsh-rail-toggle {
+    display: flex;
+    position: fixed;
+    left: 8px;
+    top: calc(8px + env(safe-area-inset-top, 0px));
+    z-index: 90;
+    width: 44px;
+    height: 44px;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    color: CanvasText;
+    font-size: 20px;
+    line-height: 1;
+    opacity: .42;
+    cursor: pointer;
+    touch-action: manipulation;
+    background: transparent;
+    border: 0;
+    border-radius: 12px;
+    box-shadow: none;
+  }
+
+  html.dsh-rail-mobile #dsh-rail-toggle:active,
+  html.dsh-rail-open #dsh-rail-toggle,
+  html.dsh-rail-mobile #dsh-rail-toggle:focus-visible { opacity: 1; }
+
+  html.dsh-rail-mobile .bt-leftcol .bt-row:focus-visible,
+  html.dsh-rail-mobile #dsh-rail-toggle:focus-visible {
+    outline: 2px solid #2676e8 !important;
+    outline-offset: 2px;
+  }
+
+  /* 浮层菜单高于抽屉；仅提升弹出层，不改内容区层级。 */
+  [class*="bt-menu"],
+  [role="menu"],
+  [role="dialog"],
+  [class*="popover"],
+  [class*="Popover"] { z-index: 240 !important; }
+
+  /* 对话正文：窄屏换行，不让代码、表格和媒体撑出视口。 */
+  #root [class*="_column"],
+  #root [class*="_flowItem"],
+  #root [class*="_scrollBody"],
+  #root [class*="bt-msg"] { min-width: 0 !important; }
+
+  #root [class*="_scroll"] { padding-right: 12px !important; padding-left: 12px !important; }
+  html.dsh-rail-mobile #root [class*="_centerCol"] [class*="_scrollBody"] {
+    padding-top: calc(52px + env(safe-area-inset-top, 0px)) !important;
+  }
+  #root [class*="_flowItem"] { width: auto !important; max-width: 100% !important; }
+  #root [class*="_flowItem"] * { overflow-wrap: anywhere; }
+  #root [class*="bt-msg"] { max-width: 100% !important; }
+  #root [class*="_bubble"] {
+    border-radius: 14px !important;
+    font-size: 15px !important;
+    line-height: 1.62 !important;
+  }
+  #root [class*="_column"] > [class*="_root"] { margin-top: 6px !important; }
+
+  #root,
+  #root [class*="_frame"],
+  #root [class*="_scrollBody"],
+  #root [class*="_column"],
+  #root [class*="_flowItem"] { max-width: 100vw !important; }
+
+  #root pre,
+  #root table,
+  #root .md-code-block,
+  #root [class*="_code"] { max-width: 100% !important; overflow-x: auto !important; }
+
+  #root img,
+  #root video,
+  #root canvas { max-width: 100% !important; height: auto !important; }
+
+  #root [class*="_composerSeat"] {
+    padding-bottom: calc(4px + env(safe-area-inset-bottom, 0px)) !important;
+  }
+  #root [class*="_dock"] { display: none !important; }
+
+  /* DS Bot 设置：单列列表和单列详情，避免手机上挤成多栏。 */
+  .bt-settings-layer { padding: 0 !important; }
+  .bt-settings {
+    align-items: stretch !important;
+    width: 100vw !important;
+    max-width: 100vw !important;
+    height: 100vh !important;
+    height: 100dvh !important;
+    max-height: 100vh !important;
+    max-height: 100dvh !important;
+    border-radius: 0 !important;
+  }
+  .bt-settings-main {
+    flex: 1 1 auto !important;
+    width: auto !important;
+    min-width: 0 !important;
+    height: 100% !important;
+    max-height: 100dvh !important;
+  }
+  .bt-settings-scroll {
+    flex: 1 1 auto !important;
+    height: 100% !important;
+    max-height: none !important;
+    padding: 12px 10px !important;
+  }
+  .bt-set-card { padding: 10px !important; }
+  .bt-set-row {
+    flex-direction: column !important;
+    align-items: stretch !important;
+    gap: 10px !important;
+    padding: 10px 0 !important;
+  }
+  .bt-set-copy { width: 100% !important; max-width: 100% !important; min-width: 0 !important; }
+  .bt-swatches {
+    flex-wrap: nowrap !important;
+    max-width: 100% !important;
+    overflow-x: auto !important;
+    padding-bottom: 4px !important;
+  }
+
+  html.dsh-set #dsh-rail-toggle,
+  html.dsh-set #dsh-rail-backdrop,
+  html.dsh-set .bt-leftcol,
+  html.dsh-set #root [class*="sidebarCol"],
+  html.dsh-hs #dsh-rail-toggle,
+  html.dsh-hs #dsh-rail-backdrop,
+  html.dsh-hs .bt-leftcol,
+  html.dsh-hs #root [class*="sidebarCol"],
+  html.dsh-panel #dsh-rail-toggle,
+  html.dsh-panel #dsh-rail-backdrop,
+  html.dsh-panel .bt-leftcol,
+  html.dsh-panel #root [class*="sidebarCol"] { display: none !important; }
+
+  html.dsh-set:not(.dsh-set-2) .bt-settings-main { display: none !important; }
+  html.dsh-set:not(.dsh-set-2) .bt-settings-nav {
+    display: flex !important;
+    flex-direction: column !important;
+    width: 100% !important;
+    min-width: 0 !important;
+    padding: 8px 12px 20px !important;
+    gap: 2px !important;
+  }
+  html.dsh-set:not(.dsh-set-2) .bt-settings-nav > * {
+    display: flex !important;
+    min-height: 54px !important;
+    align-items: center !important;
+    gap: 12px !important;
+    padding: 0 12px !important;
+    border-radius: 12px !important;
+    font-size: 16px !important;
+  }
+  html.dsh-set.dsh-set-2 .bt-settings-nav { display: none !important; }
+  html.dsh-set.dsh-set-2 .bt-settings-main {
+    display: flex !important;
+    width: 100% !important;
+    min-width: 0 !important;
+  }
+
+  .dsh-set-back,
+  .dsh-hs-close {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    flex: 0 0 auto;
+    color: CanvasText;
+    cursor: pointer;
+    background: transparent;
+    border: 0;
+    border-radius: 12px;
+  }
+  .dsh-set-back { margin: 6px 0 2px 6px; }
+  .dsh-set-back:active,
+  .dsh-hs-close:active { background: rgba(127, 127, 127, .18); }
+
+  /* Harness 设置：导航先单列展示，选择后进入全屏详情。 */
+  html.dsh-hs [class*="_overlay"]:has([class*="_navList"]) {
+    position: fixed !important;
+    inset: 0 !important;
+  }
+  html.dsh-hs [class*="_panel"]:has([class*="_navList"]) {
+    position: fixed !important;
+    inset: 0 !important;
+    width: 100vw !important;
+    max-width: 100vw !important;
+    height: 100vh !important;
+    height: 100dvh !important;
+    max-height: 100dvh !important;
+    margin: 0 !important;
+    border-radius: 0 !important;
+  }
+  /* Harness 二级/三级详情：隐藏整条桌面导航列，不让 188px 空导航挤压正文。 */
+  html.dsh-hs.dsh-hs-2 [class*="_panel"] > [class*="_nav"] { display: none !important; }
+  html.dsh-hs [class*="_navList"] { width: 100% !important; }
+  html.dsh-hs [class*="_nav"] { position: relative !important; }
+  html.dsh-hs:not(.dsh-hs-2) [class*="_panel"] > [class*="_nav"] {
+    box-sizing: border-box !important;
+    flex: 1 1 100% !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+  }
+  html.dsh-hs [class*="_navCell"] {
+    display: flex !important;
+    box-sizing: border-box !important;
+    width: 100% !important;
+    min-width: 0 !important;
+    align-self: stretch !important;
+    height: 54px !important;
+    justify-content: flex-start !important;
+    gap: 10px !important;
+    padding: 0 14px !important;
+    border-radius: 12px !important;
+    font-size: 16px !important;
+  }
+  html.dsh-hs [class*="_navCell"] > * {
+    flex: 0 0 auto !important;
+    width: auto !important;
+    min-width: 0 !important;
+  }
+  html.dsh-hs [class*="_navLabel"] {
+    flex: 1 1 auto !important;
+    width: auto !important;
+    min-width: 0 !important;
+    overflow: hidden !important;
+    font-size: 16px !important;
+    text-overflow: ellipsis !important;
+    white-space: nowrap !important;
+  }
+  html.dsh-hs:not(.dsh-hs-2) [class*="_content"] { display: none !important; }
+  html.dsh-hs:not(.dsh-hs-2) [class*="_navList"] { display: flex !important; }
+  html.dsh-hs.dsh-hs-2 [class*="_navList"] { display: none !important; }
+  html.dsh-hs.dsh-hs-2 [class*="_content"] {
+    display: flex !important;
+    flex: 1 1 100% !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+  }
+  html.dsh-hs.dsh-hs-2 [class*="_content"] [class*="_header"] {
+    position: sticky !important;
+    top: 0 !important;
+    z-index: 3 !important;
+    box-sizing: border-box !important;
+    flex: 0 0 auto !important;
+    min-height: calc(56px + env(safe-area-inset-top, 0px)) !important;
+    padding: calc(6px + env(safe-area-inset-top, 0px)) 12px 6px !important;
+    align-items: center !important;
+    gap: 8px !important;
+    background: Canvas !important;
+    border-bottom: 1px solid rgba(127, 127, 127, .16) !important;
+  }
+  html.dsh-hs.dsh-hs-2 [class*="_content"] [class*="_header"] [class*="_actions"] {
+    min-width: 0 !important;
+    flex: 1 1 auto !important;
+    justify-content: flex-end !important;
+    gap: 6px !important;
+  }
+  html.dsh-hs.dsh-hs-2 [class*="_content"] [class*="_header"] [class*="_actions"] button {
+    min-height: 40px !important;
+    padding: 0 9px !important;
+    white-space: nowrap !important;
+  }
+  html.dsh-hs.dsh-hs-2 [class*="_content"] [class*="_options"] {
+    flex: 1 1 auto !important;
+    width: 100% !important;
+    min-height: 0 !important;
+    overflow-y: auto !important;
+    overscroll-behavior: contain !important;
+    padding: 16px 16px calc(24px + env(safe-area-inset-bottom, 0px)) !important;
+  }
+  html.dsh-hs.dsh-hs-2 [class*="_options"] [class*="_section"] {
+    width: 100% !important;
+    min-width: 0 !important;
+    margin: 0 auto 20px !important;
+  }
+  html.dsh-hs.dsh-hs-2 [class*="_options"] h1,
+  html.dsh-hs.dsh-hs-2 [class*="_options"] h2,
+  html.dsh-hs.dsh-hs-2 [class*="_options"] h3 {
+    margin: 4px 0 8px !important;
+    font-size: 20px !important;
+    line-height: 1.3 !important;
+  }
+  html.dsh-hs [class*="_options"] {
+    box-sizing: border-box !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    padding: 0 12px !important;
+    overflow-x: hidden !important;
+  }
+  html.dsh-hs [class*="_options"] [class*="_setting"],
+  html.dsh-hs [class*="_options"] [class*="_row"],
+  html.dsh-hs [class*="_options"] [class*="_item"],
+  html.dsh-hs [class*="_options"] [class*="_entry"],
+  html.dsh-hs [class*="_options"] [class*="_field"] {
+    flex-wrap: wrap !important;
+    gap: 8px !important;
+    max-width: 100% !important;
+  }
+  html.dsh-hs [class*="_options"] * { box-sizing: border-box !important; max-width: 100% !important; }
+  html.dsh-hs [class*="_options"] [class*="_setting"] > * { min-width: 0 !important; }
+  html.dsh-hs [class*="_panel"] [class*="_header"] { width: 100% !important; }
+
+  /* Bot 设置二级/三级页：统一全屏页面容器、标题栏、滚动和表单节奏。 */
+  html.dsh-set .bt-settings { overflow: hidden !important; }
+  html.dsh-set .bt-settings-nav,
+  html.dsh-set .bt-settings-main {
+    box-sizing: border-box !important;
+    min-height: 0 !important;
+    overflow: hidden !important;
+    background: Canvas !important;
+  }
+  html.dsh-set .bt-settings-nav { padding-top: calc(12px + env(safe-area-inset-top, 0px)) !important; }
+  html.dsh-set:not(.dsh-set-2) .bt-settings-nav {
+    flex: 1 1 auto !important;
+    height: 100% !important;
+    overflow-y: auto !important;
+    overscroll-behavior: contain !important;
+    border-right: 0 !important;
+    padding: calc(58px + env(safe-area-inset-top, 0px)) 12px calc(18px + env(safe-area-inset-bottom, 0px)) !important;
+  }
+  html.dsh-set:not(.dsh-set-2) .bt-settings-nav::before {
+    content: "设置";
+    display: block;
+    flex: 0 0 auto;
+    padding: 4px 12px 12px;
+    color: CanvasText;
+    font-size: 22px;
+    font-weight: 650;
+    line-height: 1.3;
+  }
+  html.dsh-set:not(.dsh-set-2) .bt-settings-nav > * {
+    box-sizing: border-box !important;
+    width: 100% !important;
+    min-width: 0 !important;
+    justify-content: flex-start !important;
+    text-align: left !important;
+  }
+  html.dsh-set:not(.dsh-set-2) .bt-settings-nav > * > * { flex: 0 0 auto !important; }
+  html.dsh-set .bt-settings-main { display: flex !important; flex-direction: column !important; }
+  html.dsh-set.dsh-set-2 .bt-settings-main { width: 100% !important; }
+  html.dsh-set .bt-settings-main:has(.bt-settings-head button[aria-label*="返回"]) > .dsh-set-back { display: none !important; }
+  html.dsh-set .dsh-set-back {
+    position: relative !important;
+    z-index: 2 !important;
+    flex: 0 0 48px !important;
+    width: 48px !important;
+    height: 48px !important;
+    margin: calc(4px + env(safe-area-inset-top, 0px)) 0 0 8px !important;
+  }
+  html.dsh-set .bt-settings-scroll {
+    box-sizing: border-box !important;
+    min-height: 0 !important;
+    overflow-y: auto !important;
+    overscroll-behavior: contain !important;
+    padding: 8px 16px calc(24px + env(safe-area-inset-bottom, 0px)) !important;
+  }
+  html.dsh-set .bt-settings-main > :is(h1,h2,h3),
+  html.dsh-set .bt-settings-scroll :is(h1,h2,h3) {
+    margin: 4px 0 12px !important;
+    font-size: 20px !important;
+    line-height: 1.3 !important;
+  }
+  html.dsh-set .bt-set-card {
+    margin: 0 0 12px !important;
+    border-radius: 16px !important;
+  }
+  html.dsh-set .bt-set-row {
+    gap: 8px !important;
+    padding: 12px 0 !important;
+  }
+  html.dsh-set .bt-set-row :is(input,select,textarea,button) {
+    box-sizing: border-box !important;
+    max-width: 100% !important;
+    min-height: 42px !important;
+    border-radius: 11px !important;
+  }
+  html.dsh-set .bt-set-row textarea { min-height: 96px !important; resize: vertical !important; }
+  html.dsh-set .bt-settings :is(input,select,textarea) { font-size: 16px !important; }
+  html.dsh-set .bt-settings input.bt-bs-input {
+    display: block !important;
+    flex: 0 0 44px !important;
+    align-self: stretch !important;
+    width: 100% !important;
+    min-width: 0 !important;
+    min-height: 44px !important;
+    height: 44px !important;
+    max-height: 44px !important;
+    padding: 0 12px !important;
+    text-align: left !important;
+  }
+
+  /* 设置内的三级弹层改为贴底的可滚动面板，保留上层关闭/返回路径。 */
+  html.dsh-hs [role="dialog"]:not([class*="_panel"]),
+  html.dsh-set [role="dialog"]:not(.bt-settings) {
+    box-sizing: border-box !important;
+    max-width: calc(100vw - 20px) !important;
+    max-height: min(88dvh, 720px) !important;
+    overflow: auto !important;
+    overscroll-behavior: contain !important;
+    border-radius: 18px !important;
+  }
+
+  /* 详情面板全屏显示，避免与抽屉并排争夺宽度。 */
+  html.dsh-panel .bt-panel {
+    left: 0 !important;
+    right: auto !important;
+    width: 100vw !important;
+    max-width: 100vw !important;
+    height: 100vh !important;
+    height: 100dvh !important;
+    border-radius: 0 !important;
+  }
+  html.dsh-panel .bt-panel [class*="_row"] { flex-wrap: wrap !important; gap: 8px !important; }
+
+  @media (prefers-reduced-motion: reduce) {
+    html.dsh-rail-mobile .bt-leftcol,
+    html.dsh-rail-mobile #dsh-rail-backdrop { transition: none !important; }
+  }
+}
